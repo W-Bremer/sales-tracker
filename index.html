@@ -209,28 +209,32 @@
                     // Row 1: current sales, goal
                     var firstLine = lines[0];
                     var values = firstLine.split(",");
-                    currentSales = parseInt(values[0].replace(/"/g, "")) || 0;
-                    salesGoal = parseInt(values[1].replace(/"/g, "")) || 0;
+                    var newSales = parseInt(values[0].replace(/"/g, "")) || 0;
+                    var newGoal = parseInt(values[1].replace(/"/g, "")) || 0;
 
-                    // Row 6 (index 5): announcement text in column A
+                    // Check for new sale
+                    if (previousSales >= 0 && newSales > currentSales) {
+                        triggerExplosion();
+                    }
+                    previousSales = currentSales;
+                    currentSales = newSales;
+                    salesGoal = newGoal;
+
+                    // Row 6 (index 5): announcement text
                     if (lines.length >= 6) {
                         var row6 = lines[5];
                         var row6Values = row6.split(",");
                         announcement = (row6Values[0] || "").replace(/"/g, "").trim();
-                        var bannerEl = document.getElementById("announcementText");
-                        if (announcement) {
-                            bannerEl.textContent = announcement;
-                            document.getElementById("announcementBanner").style.display = "block";
-                        } else {
-                            document.getElementById("announcementBanner").style.display = "none";
-                        }
                     }
 
-                    // Check for new sale
-                    if (previousSales >= 0 && currentSales > previousSales) {
-                        triggerExplosion();
+                    // Update announcement banner
+                    var bannerEl = document.getElementById("announcementText");
+                    if (announcement) {
+                        bannerEl.textContent = announcement;
+                        document.getElementById("announcementBanner").style.display = "block";
+                    } else {
+                        document.getElementById("announcementBanner").style.display = "none";
                     }
-                    previousSales = currentSales;
 
                     updateDisplay();
                     document.getElementById("lastUpdated").textContent = "Updated: " + new Date().toLocaleTimeString();
@@ -239,7 +243,7 @@
         }
 
         fetchData();
-        setInterval(fetchData, 5000);
+        setInterval(fetchData, 60000);
     </script>
 </body>
 </html>
