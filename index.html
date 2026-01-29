@@ -44,7 +44,7 @@
     <div class="container">
         <div class="header">
             <div class="company-name">Bulkloads.com</div>
-            <div class="week-label">Weekly Sales Tracker</div>
+            <div class="week-label">Monthly Sales Tracker</div>
         </div>
         <div id="content"></div>
         <div class="last-updated" id="lastUpdated"></div>
@@ -64,7 +64,7 @@
             var done = currentSales >= salesGoal;
             var pc = "", pcc = "normal", msg = "", mc = "";
 
-            if (done) { pc = "goal-reached"; pcc = "goal-reached"; msg = "GOAL REACHED!"; mc = "goal-reached"; }
+            if (done) { pc = "goal-reached"; pcc = "goal-reached"; msg = "GOAL REACHED!"; mc = "goal-reached"; }
             else if (near) { pc = "near-goal"; pcc = "near-goal"; msg = "ALMOST THERE!"; mc = "almost-there"; }
             else if (pct >= 50) { msg = "CRUSHING IT!"; mc = "crushing-it"; }
             else if (pct >= 25) { msg = "GREAT START!"; mc = "crushing-it"; }
@@ -73,7 +73,7 @@
             var rem = Math.max(0, salesGoal - currentSales);
             var html = "<div class='stats-container'>" +
                 "<div class='stat-box'><div class='stat-label'>Current Sales</div><div class='stat-value current-sales'>" + currentSales + "</div></div>" +
-                "<div class='stat-box'><div class='stat-label'>Weekly Goal</div><div class='stat-value goal-value'>" + salesGoal + "</div></div>" +
+                "<div class='stat-box'><div class='stat-label'>Monthly Goal</div><div class='stat-value goal-value'>" + salesGoal + "</div></div>" +
                 "</div>" +
                 "<div class='progress-section'>" +
                 "<div class='progress-bar-container'><div class='progress-bar " + pc + "' style='width:" + Math.max(pct, 8) + "%'><span class='progress-text'>" + currentSales + " / " + salesGoal + "</span></div></div>" +
