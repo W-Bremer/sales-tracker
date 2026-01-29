@@ -36,10 +36,8 @@
         .message.almost-there { color: #ffeb3b; animation: bounce 0.5s ease infinite; }
         .message.goal-reached { color: #ffd700; font-size: 3rem; }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        .confetti { position: fixed; width: 15px; height: 15px; pointer-events: none; opacity: 0; }
         .last-updated { position: fixed; bottom: 20px; right: 30px; color: rgba(255, 255, 255, 0.4); font-size: 0.9rem; }
         .error-message { background: rgba(244, 67, 54, 0.2); border: 2px solid #f44336; border-radius: 10px; padding: 30px; margin: 20px 0; color: #ff8a80; }
-        @keyframes fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
     </style>
 </head>
 <body>
@@ -52,75 +50,57 @@
         <div class="last-updated" id="lastUpdated"></div>
     </div>
     <script>
-        var GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTWdKsAsW2pdeRm_j3z_KK4nZZPDa1BGyxTzG-UnkSmFOMAbdHls3bOR7-whQtfhka4UOieIfI4VX6u/pub?output=csv';
-        var REFRESH_INTERVAL = 300000;
+        var SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTWdKsAsW2pdeRm_j3z_KK4nZZPDa1BGyxTzG-UnkSmFOMAbdHls3bOR7-whQtfhka4UOieIfI4VX6u/pub?output=csv";
         var currentSales = 0;
         var salesGoal = 0;
 
         function showError(msg) {
-            document.getElementById('content').innerHTML = '<div class="error-message"><h3>Error</h3><p>' + msg + '</p></div>';
-        }
-
-        function createConfetti() {
-            var colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1'];
-            for (var i = 0; i < 50; i++) {
-                var c = document.createElement('div');
-                c.className = 'confetti';
-                c.style.left = Math.random() * 100 + 'vw';
-                c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                c.style.animation = 'fall ' + (2 + Math.random() * 3) + 's linear forwards';
-                document.body.appendChild(c);
-                setTimeout(function(el) { return function() { el.remove(); }; }(c), 5000);
-            }
+            document.getElementById("content").innerHTML = "<div class='error-message'><h3>Error</h3><p>" + msg + "</p></div>";
         }
 
         function updateDisplay() {
             var pct = salesGoal > 0 ? Math.min((currentSales / salesGoal) * 100, 100) : 0;
             var near = pct >= 80 && pct < 100;
             var done = currentSales >= salesGoal;
-            var pc = '', pcc = 'normal', msg = '', mc = '';
-            
-            if (done) { pc = 'goal-reached'; pcc = 'goal-reached'; msg = '🎉 GOAL REACHED! 🎉'; mc = 'goal-reached'; }
-            else if (near) { pc = 'near-goal'; pcc = 'near-goal'; msg = '🔥 ALMOST THERE!'; mc = 'almost-there'; }
-            else if (pct >= 50) { msg = '💪 CRUSHING IT!'; mc = 'crushing-it'; }
-            else if (pct >= 25) { msg = '🚀 GREAT START!'; mc = 'crushing-it'; }
-            else { msg = '⚡ LETS GO!'; mc = 'crushing-it'; }
-            
+            var pc = "", pcc = "normal", msg = "", mc = "";
+
+            if (done) { pc = "goal-reached"; pcc = "goal-reached"; msg = "GOAL REACHED!"; mc = "goal-reached"; }
+            else if (near) { pc = "near-goal"; pcc = "near-goal"; msg = "ALMOST THERE!"; mc = "almost-there"; }
+            else if (pct >= 50) { msg = "CRUSHING IT!"; mc = "crushing-it"; }
+            else if (pct >= 25) { msg = "GREAT START!"; mc = "crushing-it"; }
+            else { msg = "LETS GO!"; mc = "crushing-it"; }
+
             var rem = Math.max(0, salesGoal - currentSales);
-            var html = '<div class="stats-container">' +
-                '<div class="stat-box"><div class="stat-label">Current Sales</div><div class="stat-value current-sales">' + currentSales + '</div></div>' +
-                '<div class="stat-box"><div class="stat-label">Weekly Goal</div><div class="stat-value goal-value">' + salesGoal + '</div></div>' +
-                '</div>' +
-                '<div class="progress-section">' +
-                '<div class="progress-bar-container"><div class="progress-bar ' + pc + '" style="width:' + Math.max(pct, 8) + '%"><span class="progress-text">' + currentSales + ' / ' + salesGoal + '</span></div></div>' +
-                '<div class="percentage-display ' + pcc + '">' + pct.toFixed(0) + '%</div>' +
-                '</div>' +
-                '<div class="message ' + mc + '">' + msg + '</div>' +
-                (done ? '' : '<div style="color:#90caf9;font-size:1.3rem;margin-top:15px">' + rem + ' more to go!</div>');
-            
-            document.getElementById('content').innerHTML = html;
-            if (done) createConfetti();
+            var html = "<div class='stats-container'>" +
+                "<div class='stat-box'><div class='stat-label'>Current Sales</div><div class='stat-value current-sales'>" + currentSales + "</div></div>" +
+                "<div class='stat-box'><div class='stat-label'>Weekly Goal</div><div class='stat-value goal-value'>" + salesGoal + "</div></div>" +
+                "</div>" +
+                "<div class='progress-section'>" +
+                "<div class='progress-bar-container'><div class='progress-bar " + pc + "' style='width:" + Math.max(pct, 8) + "%'><span class='progress-text'>" + currentSales + " / " + salesGoal + "</span></div></div>" +
+                "<div class='percentage-display " + pcc + "'>" + pct.toFixed(0) + "%</div>" +
+                "</div>" +
+                "<div class='message " + mc + "'>" + msg + "</div>" +
+                (done ? "" : "<div style='color:#90caf9;font-size:1.3rem;margin-top:15px'>" + rem + " more to go!</div>");
+
+            document.getElementById("content").innerHTML = html;
         }
 
         function fetchData() {
-            fetch(GOOGLE_SHEET_URL)
-                .then(function(r) { return r.text(); })
-                .then(function(t) {
-                    var lines = t.trim().split('
-');
-                    if (lines.length > 0) {
-                        var vals = lines[0].split(',');
-                        currentSales = parseInt(vals[0].replace(/"/g, '')) || 0;
-                        salesGoal = parseInt(vals[1].replace(/"/g, '')) || 0;
-                        updateDisplay();
-                    }
-                    document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+            fetch(SHEET_URL)
+                .then(function(response) { return response.text(); })
+                .then(function(data) {
+                    var firstLine = data.split(String.fromCharCode(10))[0];
+                    var values = firstLine.split(",");
+                    currentSales = parseInt(values[0].replace(/"/g, "")) || 0;
+                    salesGoal = parseInt(values[1].replace(/"/g, "")) || 0;
+                    updateDisplay();
+                    document.getElementById("lastUpdated").textContent = "Updated: " + new Date().toLocaleTimeString();
                 })
-                .catch(function(e) { showError(e.message); });
+                .catch(function(err) { showError(err.message); });
         }
 
         fetchData();
-        setInterval(fetchData, REFRESH_INTERVAL);
+        setInterval(fetchData, 300000);
     </script>
 </body>
 </html>
