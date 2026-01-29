@@ -201,7 +201,7 @@
         }
 
         function fetchData() {
-            fetch(SHEET_URL)
+            fetch(SHEET_URL + "&_=" + Date.now(), { cache: "no-store" })
                 .then(function(response) { return response.text(); })
                 .then(function(data) {
                     var lines = data.split(String.fromCharCode(10));
