@@ -138,7 +138,7 @@
     </div>
 
     <script>
-        var SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTWdKsAsW2pdeRm_j3z_KK4nZZPDa1BGyxTzG-UnkSmFOMAbdHls3bOR7-whQtfhka4UOieIfI4VX6u/pub?output=csv";
+        var SHEET_URL = "https://script.google.com/macros/s/AKfycbytOkDuaapqYBBeTk9i5bP_aQElt4TrWJAFqbtJQ0hw6xTnOmiJi5od5oyAhJ4vSW1HbQ/exec";
         var currentSales = 0;
         var salesGoal = 0;
         var previousSales = -1;
@@ -201,16 +201,11 @@
         }
 
         function fetchData() {
-            fetch(SHEET_URL + "&_=" + Date.now(), { cache: "no-store" })
-                .then(function(response) { return response.text(); })
+            fetch(SHEET_URL + "?_=" + Date.now())
+                .then(function(response) { return response.json(); })
                 .then(function(data) {
-                    var lines = data.split(String.fromCharCode(10));
-
-                    // Row 1: current sales, goal
-                    var firstLine = lines[0];
-                    var values = firstLine.split(",");
-                    var newSales = parseInt(values[0].replace(/"/g, "")) || 0;
-                    var newGoal = parseInt(values[1].replace(/"/g, "")) || 0;
+                    var newSales = parseInt(data.currentSales) || 0;
+                    var newGoal = parseInt(data.goal) || 0;
 
                     // Check for new sale
                     if (previousSales >= 0 && newSales > currentSales) {
@@ -219,13 +214,7 @@
                     previousSales = currentSales;
                     currentSales = newSales;
                     salesGoal = newGoal;
-
-                    // Row 6 (index 5): announcement text
-                    if (lines.length >= 6) {
-                        var row6 = lines[5];
-                        var row6Values = row6.split(",");
-                        announcement = (row6Values[0] || "").replace(/"/g, "").trim();
-                    }
+                    announcement = data.announcement || "";
 
                     // Update announcement banner
                     var bannerEl = document.getElementById("announcementText");
