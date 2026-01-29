@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Tracker - Bulkloads.com</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;overflow:hidden}
+        .container{text-align:center;width:90%;max-width:1200px;padding:40px}
+        .header{margin-bottom:40px}
+        .company-name{font-size:2.5rem;font-weight:800;color:#4fc3f7;text-transform:uppercase;letter-spacing:4px;margin-bottom:10px}
+        .week-label{font-size:1.5rem;color:#90caf9;font-weight:600}
+        .stats-container{display:flex;justify-content:center;gap:80px;margin-bottom:60px;flex-wrap:wrap}
+        .stat-box{text-align:center}
+        .stat-label{font-size:1.4rem;color:#b0bec5;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+        .stat-value{font-size:7rem;font-weight:900;line-height:1}
+        .current-sales{color:#4fc3f7;text-shadow:0 0 30px rgba(79,195,247,0.5)}
+        .goal-value{color:#ffd54f;text-shadow:0 0 30px rgba(255,213,79,0.5)}
+        .progress-section{margin-bottom:40px}
+        .progress-bar-container{background:rgba(255,255,255,0.1);border-radius:30px;height:80px;position:relative;overflow:hidden;box-shadow:inset 0 4px 20px rgba(0,0,0,0.3)}
+        .progress-bar{height:100%;border-radius:30px;background:linear-gradient(90deg,#00c853 0%,#69f0ae 50%,#b9f6ca 100%);transition:width 1s ease-out;position:relative;display:flex;align-items:center;justify-content:flex-end;padding-right:20px;min-width:120px}
+        .progress-bar.near-goal{background:linear-gradient(90deg,#ffc107 0%,#ffeb3b 50%,#fff176 100%);animation:pulse 1s ease-in-out infinite}
+        .progress-bar.goal-reached{background:linear-gradient(90deg,#ffd700 0%,#ffec8b 30%,#ffd700 50%,#ffec8b 70%,#ffd700 100%);background-size:200% 100%;animation:shimmer 2s linear infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.85}}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .progress-text{font-size:2.5rem;font-weight:800;color:rgba(0,0,0,0.7)}
+        .percentage-display{font-size:4rem;font-weight:900;margin-top:30px}
+        .percentage-display.normal{color:#69f0ae}
+        .percentage-display.near-goal{color:#ffeb3b}
+        .percentage-display.goal-reached{color:#ffd700;animation:glow 1s ease-in-out infinite alternate}
+        @keyframes glow{from{text-shadow:0 0 20px #ffd700,0 0 40px #ffd700}to{text-shadow:0 0 40px #ffd700,0 0 80px #ffd700}}
+        .message{font-size:2rem;font-weight:600;margin-top:20px;min-height:50px}
+        .message.crushing-it{color:#69f0ae}
+        .message.almost-there{color:#ffeb3b;animation:bounce 0.5s ease infinite}
+        .message.goal-reached{color:#ffd700;font-size:3rem}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        .confetti{position:fixed;width:15px;height:15px;pointer-events:none;opacity:0}
+        .last-updated{position:fixed;bottom:20px;right:30px;color:rgba(255,255,255,0.4);font-size:0.9rem}
+        .error-message{background:rgba(244,67,54,0.2);border:2px solid #f44336;border-radius:10px;padding:30px;margin:20px 0;color:#ff8a80}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="company-name">Bulkloads.com</div>
+            <div class="week-label" id="weekLabel">Weekly Sales Tracker</div>
+        </div>
+        <div id="content"></div>
+        <div class="last-updated" id="lastUpdated"></div>
+    </div>
+    <script>
+        const GOOGLE_SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTWdKsAsW2pdeRm_j3z_KK4nZZPDa1BGyxTzG-UnkSmFOMAbdHls3bOR7-whQtfhka4UOieIfI4VX6u/pub?output=csv';
+        const REFRESH_INTERVAL=300000;
+        let currentSales=0,salesGoal=0;
+        function showError(m){document.getElementById('content').innerHTML='<div class="error-message"><h3>Error</h3><p>'+m+'</p></div>';}
+        function createConfetti(){const c=['#ffd700','#ff6b6b','#4ecdc4','#45b7d1'];for(let i=0;i<50;i++){const d=document.createElement('div');d.className='confetti';d.style.left=Math.random()*100+'vw';d.style.backgroundColor=c[Math.floor(Math.random()*c.length)];d.style.animation='fall '+(2+Math.random()*3)+'s linear forwards';document.body.appendChild(d);setTimeout(()=>d.remove(),5000);}}
+        function updateDisplay(){const p=salesGoal>0?Math.min((currentSales/salesGoal)*100,100):0;const n=p>=80&&p<100;const d=currentSales>=salesGoal;let pc='',pcc='normal',m='',mc='';if(d){pc='goal-reached';pcc='goal-reached';m='🎉 GOAL REACHED! 🎉';mc='goal-reached';}else if(n){pc='near-goal';pcc='near-goal';m='🔥 ALMOST THERE!';mc='almost-there';}else if(p>=50){m='💪 CRUSHING IT!';mc='crushing-it';}else{m='⚡ LETS GO!';mc='crushing-it';}const r=Math.max(0,salesGoal-currentSales);document.getElementById('content').innerHTML='<div class="stats-container"><div class="stat-box"><div class="stat-label">Current Sales</div><div class="stat-value current-sales">'+currentSales+'</div></div><div class="stat-box"><div class="stat-label">Weekly Goal</div><div class="stat-value goal-value">'+salesGoal+'</div></div></div><div class="progress-section"><div class="progress-bar-container"><div class="progress-bar '+pc+'" style="width:'+Math.max(p,8)+'%"><span class="progress-text">'+currentSales+'/'+salesGoal+'</span></div></div><div class="percentage-display '+pcc+'">'+p.toFixed(0)+'%</div></div><div class="message '+mc+'">'+m+'</div>'+(!d?'<div style="color:#90caf9;font-size:1.3rem;margin-top:15px">'+r+' more to go!</div>':'');if(d)createConfetti();}
+        async function fetchData(){try{const r=await fetch(GOOGLE_SHEET_URL);if(!r.ok)throw new Error('Fetch failed');const t=await r.text();const l=t.trim().split('
+');if(l.length>0){const v=l[0].split(',').map(x=>x.replace(/"/g,'').trim());currentSales=parseInt(v[0])||0;salesGoal=parseInt(v[1])||0;updateDisplay();}document.getElementById('lastUpdated').textContent='Updated: '+new Date().toLocaleTimeString();}catch(e){showError(e.message);}}
+        const s=document.createElement('style');s.textContent='@keyframes fall{0%{transform:translateY(-100vh);opacity:1}100%{transform:translateY(100vh);opacity:0}}';document.head.appendChild(s);
+        fetchData();setInterval(fetchData,REFRESH_INTERVAL);
+    </script>
+</body>
+</html>
