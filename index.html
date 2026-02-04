@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; color: white; overflow: hidden; }
 
-        /* Announcement Banner - BulkLoads Orange */
+        /* Announcement Banner */
         .announcement-banner {
             position: fixed;
             top: 0;
@@ -18,12 +18,12 @@
             background: linear-gradient(90deg, #f7941d, #ffb347, #f7941d);
             background-size: 200% 200%;
             animation: gradientShift 3s ease infinite;
-            padding: 20px 40px;
+            padding: 14px 40px;
             text-align: center;
             z-index: 1000;
         }
         .announcement-text {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 900;
             color: #1a1a1a;
             text-transform: uppercase;
@@ -35,87 +35,226 @@
             100% { background-position: 0% 50%; }
         }
 
-        .container { text-align: center; width: 90%; max-width: 1200px; padding: 40px; margin-top: 80px; }
-        .header { margin-bottom: 40px; }
-        .company-logo { margin-bottom: 10px; }
-        .company-logo img { height: 60px; width: auto; }
-        .week-label { font-size: 1.5rem; color: #8bc53f; font-weight: 600; }
-        .stats-container { display: flex; justify-content: center; gap: 80px; margin-bottom: 60px; flex-wrap: wrap; }
+        .container {
+            text-align: center;
+            width: 94%;
+            max-width: 1400px;
+            padding: 20px 40px 20px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+        }
+        .header { margin-bottom: 16px; }
+        .company-logo { margin-bottom: 4px; }
+        .company-logo img { height: 48px; width: auto; }
+        .week-label { font-size: 1.2rem; color: #8bc53f; font-weight: 600; }
+
+        /* Top stats row */
+        .top-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        .stats-container {
+            display: flex;
+            gap: 50px;
+            flex-shrink: 0;
+        }
         .stat-box { text-align: center; }
-        .stat-label { font-size: 1.4rem; color: #b0b0b0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .stat-value { font-size: 7rem; font-weight: 900; line-height: 1; }
+        .stat-label { font-size: 0.9rem; color: #b0b0b0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+        .stat-value { font-size: 4.5rem; font-weight: 900; line-height: 1; }
         .current-sales { color: #8bc53f; text-shadow: 0 0 30px rgba(139, 197, 63, 0.5); }
         .goal-value { color: #f7941d; text-shadow: 0 0 30px rgba(247, 148, 29, 0.5); }
-        .progress-section { margin-bottom: 40px; }
-        .progress-bar-container { background: rgba(255, 255, 255, 0.1); border-radius: 30px; height: 80px; position: relative; overflow: hidden; box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.5); }
-        .progress-bar { height: 100%; border-radius: 30px; background: linear-gradient(90deg, #6b9b2d 0%, #8bc53f 50%, #a8d957 100%); transition: width 1s ease-out; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; min-width: 120px; }
+
+        .progress-section { flex: 1; min-width: 0; }
+        .progress-bar-container { background: rgba(255, 255, 255, 0.1); border-radius: 20px; height: 52px; position: relative; overflow: hidden; box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.5); }
+        .progress-bar { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #6b9b2d 0%, #8bc53f 50%, #a8d957 100%); transition: width 1s ease-out; position: relative; display: flex; align-items: center; justify-content: flex-end; padding-right: 16px; min-width: 100px; }
         .progress-bar.near-goal { background: linear-gradient(90deg, #d97b0d 0%, #f7941d 50%, #ffb347 100%); animation: pulse 1s ease-in-out infinite; }
         .progress-bar.goal-reached { background: linear-gradient(90deg, #f7941d 0%, #ffd700 30%, #f7941d 50%, #ffd700 70%, #f7941d 100%); background-size: 200% 100%; animation: shimmer 2s linear infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .progress-text { font-size: 2.5rem; font-weight: 800; color: rgba(0, 0, 0, 0.8); }
-        .percentage-display { font-size: 4rem; font-weight: 900; margin-top: 30px; }
+        .progress-text { font-size: 1.6rem; font-weight: 800; color: rgba(0, 0, 0, 0.8); }
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+        .percentage-display { font-size: 2.2rem; font-weight: 900; }
         .percentage-display.normal { color: #8bc53f; }
         .percentage-display.near-goal { color: #f7941d; }
         .percentage-display.goal-reached { color: #ffd700; animation: glow 1s ease-in-out infinite alternate; }
         @keyframes glow { from { text-shadow: 0 0 20px #f7941d, 0 0 40px #f7941d; } to { text-shadow: 0 0 40px #ffd700, 0 0 80px #ffd700; } }
-        .message { font-size: 2rem; font-weight: 600; margin-top: 20px; min-height: 50px; }
+        .message { font-size: 1.6rem; font-weight: 700; }
         .message.crushing-it { color: #8bc53f; }
         .message.almost-there { color: #f7941d; animation: bounce 0.5s ease infinite; }
-        .message.goal-reached { color: #ffd700; font-size: 3rem; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        .last-updated { position: fixed; bottom: 20px; right: 30px; color: rgba(255, 255, 255, 0.4); font-size: 0.9rem; }
-        .error-message { background: rgba(244, 67, 54, 0.2); border: 2px solid #f44336; border-radius: 10px; padding: 30px; margin: 20px 0; color: #ff8a80; }
-        .remaining { color: #8bc53f; font-size: 1.3rem; margin-top: 15px; }
+        .message.goal-reached { color: #ffd700; font-size: 2rem; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .remaining { color: #8bc53f; font-size: 1rem; }
+
+        /* Leaderboard */
+        .leaderboard-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+            min-height: 0;
+        }
+        .leaderboard-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #f7941d;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px;
+            flex: 1;
+        }
+        .leaderboard-table thead th {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            text-align: center;
+            border-bottom: 2px solid rgba(247, 148, 29, 0.3);
+        }
+        .leaderboard-table thead th:first-child {
+            text-align: left;
+            padding-left: 24px;
+        }
+        .leaderboard-table thead th:last-child {
+            text-align: right;
+            padding-right: 24px;
+        }
+        .leaderboard-table tbody tr {
+            background: rgba(255, 255, 255, 0.04);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .leaderboard-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .leaderboard-table tbody tr.top-performer {
+            background: rgba(139, 197, 63, 0.1);
+            box-shadow: 0 0 20px rgba(139, 197, 63, 0.08);
+        }
+        .leaderboard-table tbody tr.top-performer td:first-child {
+            color: #8bc53f;
+        }
+        .leaderboard-table tbody tr.totals-row {
+            background: rgba(247, 148, 29, 0.12);
+            border-top: 2px solid rgba(247, 148, 29, 0.3);
+        }
+        .leaderboard-table tbody td {
+            padding: 12px 16px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: center;
+            color: #ddd;
+            border-radius: 0;
+        }
+        .leaderboard-table tbody tr td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+        .leaderboard-table tbody tr td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+        .leaderboard-table tbody td:first-child {
+            text-align: left;
+            padding-left: 24px;
+            font-size: 1.4rem;
+        }
+        .leaderboard-table tbody td:last-child {
+            text-align: right;
+            padding-right: 24px;
+        }
+        .salesman-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #f7941d); color: #1a1a1a; }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #1a1a1a; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #a0622e); color: #1a1a1a; }
+        .rank-other { background: rgba(255, 255, 255, 0.1); color: #888; }
+
+        .monthly-total {
+            font-size: 1.6rem !important;
+            font-weight: 900 !important;
+            color: #8bc53f !important;
+        }
+        .totals-row td {
+            color: #f7941d !important;
+            font-weight: 800 !important;
+            font-size: 1.4rem !important;
+        }
+        .totals-row .monthly-total {
+            color: #f7941d !important;
+        }
+        .totals-label {
+            font-size: 1.2rem !important;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #f7941d !important;
+        }
+
+        .week-highlight {
+            position: relative;
+        }
+
+        .last-updated { position: fixed; bottom: 10px; right: 20px; color: rgba(255, 255, 255, 0.3); font-size: 0.8rem; }
+        .error-message { background: rgba(244, 67, 54, 0.2); border: 2px solid #f44336; border-radius: 10px; padding: 20px; margin: 20px 0; color: #ff8a80; }
 
         /* Explosion Animation */
         .explosion-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            pointer-events: none;
-            opacity: 0;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2000; pointer-events: none; opacity: 0;
         }
-        .explosion-overlay.active {
-            animation: explosionFade 3s ease-out forwards;
-        }
-        @keyframes explosionFade {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; }
-        }
+        .explosion-overlay.active { animation: explosionFade 3s ease-out forwards; }
+        @keyframes explosionFade { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
         .explosion-text {
-            font-size: 8rem;
-            font-weight: 900;
-            color: #f7941d;
+            font-size: 6rem; font-weight: 900; color: #f7941d;
             text-shadow: 0 0 50px #8bc53f, 0 0 100px #f7941d, 0 0 150px #8bc53f;
             animation: explodeText 3s ease-out forwards;
         }
-        @keyframes explodeText {
-            0% { transform: scale(0.5); opacity: 0; }
-            20% { transform: scale(1.5); opacity: 1; }
-            40% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 0; }
-        }
+        @keyframes explodeText { 0% { transform: scale(0.5); opacity: 0; } 20% { transform: scale(1.5); opacity: 1; } 40% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 0; } }
+        .confetti { position: fixed; width: 15px; height: 15px; top: -20px; z-index: 1999; animation: confettiFall 3s ease-out forwards; }
+        @keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        /* Confetti */
-        .confetti {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            top: -20px;
-            z-index: 1999;
-            animation: confettiFall 3s ease-out forwards;
+        /* Current week column glow */
+        .current-week-cell {
+            color: #fff !important;
+            text-shadow: 0 0 8px rgba(139, 197, 63, 0.4);
         }
-        @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        .current-week-header {
+            color: #8bc53f !important;
+            position: relative;
+        }
+        .current-week-header::after {
+            content: '◄';
+            margin-left: 6px;
+            font-size: 0.7rem;
+            color: #8bc53f;
         }
     </style>
 </head>
@@ -133,7 +272,8 @@
             <div class="company-logo"><img src="https://bulkloads.com/_next/static/media/bulkloads_logo.acf79a5a.png" alt="BulkLoads"></div>
             <div class="week-label">Monthly Sales Tracker</div>
         </div>
-        <div id="content"></div>
+        <div id="topContent"></div>
+        <div id="leaderboardContent"></div>
         <div class="last-updated" id="lastUpdated"></div>
     </div>
 
@@ -143,9 +283,10 @@
         var salesGoal = 0;
         var previousSales = -1;
         var announcement = "";
+        var salespeople = [];
 
         function showError(msg) {
-            document.getElementById("content").innerHTML = "<div class='error-message'><h3>Error</h3><p>" + msg + "</p></div>";
+            document.getElementById("topContent").innerHTML = "<div class='error-message'><h3>Error</h3><p>" + msg + "</p></div>";
         }
 
         function createConfetti() {
@@ -168,9 +309,17 @@
             void overlay.offsetWidth;
             overlay.classList.add('active');
             createConfetti();
-            setTimeout(function() {
-                overlay.classList.remove('active');
-            }, 3500);
+            setTimeout(function() { overlay.classList.remove('active'); }, 3500);
+        }
+
+        function getCurrentWeek() {
+            // Determine which week of the month we're in (1-4)
+            var now = new Date();
+            var day = now.getDate();
+            if (day <= 7) return 1;
+            if (day <= 14) return 2;
+            if (day <= 21) return 3;
+            return 4;
         }
 
         function updateDisplay() {
@@ -183,21 +332,93 @@
             else if (near) { pc = "near-goal"; pcc = "near-goal"; msg = "ALMOST THERE!"; mc = "almost-there"; }
             else if (pct >= 50) { msg = "CRUSHING IT!"; mc = "crushing-it"; }
             else if (pct >= 25) { msg = "GREAT START!"; mc = "crushing-it"; }
-            else { msg = "LETS GO!"; mc = "crushing-it"; }
+            else { msg = "LET'S GO!"; mc = "crushing-it"; }
 
             var rem = Math.max(0, salesGoal - currentSales);
-            var html = "<div class='stats-container'>" +
-                "<div class='stat-box'><div class='stat-label'>Current Sales</div><div class='stat-value current-sales'>" + currentSales + "</div></div>" +
-                "<div class='stat-box'><div class='stat-label'>Monthly Goal</div><div class='stat-value goal-value'>" + salesGoal + "</div></div>" +
+            var html = "<div class='top-section'>" +
+                "<div class='stats-container'>" +
+                "<div class='stat-box'><div class='stat-label'>Sales</div><div class='stat-value current-sales'>" + currentSales + "</div></div>" +
+                "<div class='stat-box'><div class='stat-label'>Goal</div><div class='stat-value goal-value'>" + salesGoal + "</div></div>" +
                 "</div>" +
                 "<div class='progress-section'>" +
                 "<div class='progress-bar-container'><div class='progress-bar " + pc + "' style='width:" + Math.max(pct, 8) + "%'><span class='progress-text'>" + currentSales + " / " + salesGoal + "</span></div></div>" +
+                "<div class='progress-meta'>" +
                 "<div class='percentage-display " + pcc + "'>" + pct.toFixed(0) + "%</div>" +
-                "</div>" +
                 "<div class='message " + mc + "'>" + msg + "</div>" +
-                (done ? "" : "<div class='remaining'>" + rem + " more to go!</div>");
+                (done ? "" : "<div class='remaining'>" + rem + " to go</div>") +
+                "</div></div></div>";
 
-            document.getElementById("content").innerHTML = html;
+            document.getElementById("topContent").innerHTML = html;
+
+            // Leaderboard
+            if (salespeople.length > 0) {
+                var currentWeek = getCurrentWeek();
+                var numWeeks = 0;
+                if (salespeople.length > 0 && salespeople[0].weeks) {
+                    numWeeks = salespeople[0].weeks.length;
+                }
+
+                // Sort by monthly total descending for ranking
+                var sorted = salespeople.slice().sort(function(a, b) { return b.total - a.total; });
+                var rankMap = {};
+                sorted.forEach(function(p, i) { rankMap[p.name] = i + 1; });
+
+                // Week headers
+                var weekHeaders = "";
+                for (var w = 0; w < numWeeks; w++) {
+                    var isCurrentWeek = (w + 1) === currentWeek;
+                    weekHeaders += "<th class='" + (isCurrentWeek ? "current-week-header" : "") + "'>Wk " + (w + 1) + "</th>";
+                }
+
+                // Determine the current month name
+                var monthName = new Date().toLocaleString('default', { month: 'long' });
+
+                var tableHTML = "<div class='leaderboard-section'>" +
+                    "<div class='leaderboard-title'>📊 Salesman Breakdown</div>" +
+                    "<table class='leaderboard-table'>" +
+                    "<thead><tr><th>Salesman</th>" + weekHeaders + "<th>" + monthName + "</th></tr></thead><tbody>";
+
+                // Rows sorted by total (top performer first)
+                sorted.forEach(function(person, idx) {
+                    var rank = idx + 1;
+                    var rankClass = rank <= 3 ? "rank-" + rank : "rank-other";
+                    var isTop = rank === 1;
+
+                    var weekCells = "";
+                    for (var w = 0; w < person.weeks.length; w++) {
+                        var isCurrentWeek = (w + 1) === currentWeek;
+                        weekCells += "<td class='" + (isCurrentWeek ? "current-week-cell" : "") + "'>" + person.weeks[w] + "</td>";
+                    }
+
+                    tableHTML += "<tr class='" + (isTop ? "top-performer" : "") + "'>" +
+                        "<td><span class='salesman-name'><span class='rank-badge " + rankClass + "'>" + rank + "</span>" + person.name + "</span></td>" +
+                        weekCells +
+                        "<td class='monthly-total'>" + person.total + "</td></tr>";
+                });
+
+                // Totals row
+                var weekTotals = [];
+                for (var w = 0; w < numWeeks; w++) {
+                    var wTotal = 0;
+                    salespeople.forEach(function(p) { wTotal += (p.weeks[w] || 0); });
+                    weekTotals.push(wTotal);
+                }
+                var grandTotal = 0;
+                salespeople.forEach(function(p) { grandTotal += p.total; });
+
+                var totalCells = "";
+                for (var w = 0; w < weekTotals.length; w++) {
+                    var isCurrentWeek = (w + 1) === currentWeek;
+                    totalCells += "<td class='" + (isCurrentWeek ? "current-week-cell" : "") + "'>" + weekTotals[w] + "</td>";
+                }
+
+                tableHTML += "<tr class='totals-row'><td class='totals-label'>Team Total</td>" +
+                    totalCells +
+                    "<td class='monthly-total'>" + grandTotal + "</td></tr>";
+
+                tableHTML += "</tbody></table></div>";
+                document.getElementById("leaderboardContent").innerHTML = tableHTML;
+            }
         }
 
         function fetchData() {
@@ -207,7 +428,6 @@
                     var newSales = parseInt(data.currentSales) || 0;
                     var newGoal = parseInt(data.goal) || 0;
 
-                    // Check for new sale
                     if (previousSales >= 0 && newSales > currentSales) {
                         triggerExplosion();
                     }
@@ -215,6 +435,17 @@
                     currentSales = newSales;
                     salesGoal = newGoal;
                     announcement = data.announcement || "";
+
+                    // Parse salespeople data
+                    if (data.salespeople && Array.isArray(data.salespeople)) {
+                        salespeople = data.salespeople.map(function(row) {
+                            return {
+                                name: row.name || "",
+                                weeks: row.weeks || [],
+                                total: parseInt(row.total) || 0
+                            };
+                        });
+                    }
 
                     // Update announcement banner
                     var bannerEl = document.getElementById("announcementText");
